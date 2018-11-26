@@ -103,9 +103,10 @@
 # Cask.
 - name: Install configured cask applications.
   homebrew_cask:
-    name: "{{ item }}"
-    state: "{{ homebrew_cask_state | default('present') }}"
+    name: "{{ item.name | default (item) }}"
+    state: "{{ item.state | default ( homebrew_cask_state ) | default('present') }}"
     install_options: "appdir={{ homebrew_cask_appdir }}"
+    greedy: true
   with_items: "{{ homebrew_cask_apps }}"
 
 - name: Ensure blacklisted cask applications are not installed.
